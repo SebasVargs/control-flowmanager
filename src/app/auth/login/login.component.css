@@ -1,0 +1,26 @@
+.power {
+  border-width: 1px;
+}
+
+.registro > h1 {
+  margin-top: 1rem;
+}
+
+.registro-images > img {
+  width: 3rem;
+  margin: 1rem;
+}
+
+form {
+  background-color: #F2E3D5;
+}
+
+button {
+  color: white;
+  background-color: #3CA6A6;
+}
+
+button:hover {
+  transform: scale(1.01);
+  background-color: #328f8f;
+}

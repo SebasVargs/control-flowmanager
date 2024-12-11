@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Paleta 1 (HEX)(Oscuro a Claro)
+    #012E40
+    #024959
+    #026773
+    #3CA6A6
+    #F2E3D5
+*/

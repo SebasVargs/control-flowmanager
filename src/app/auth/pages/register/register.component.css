@@ -1,0 +1,97 @@
+.power{
+  background-color: #F2E3D5;
+  border-width: 1px;
+}
+
+.form-container > h3{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4vh;
+  font-size: 3vh;
+}
+
+.buttons > a {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 1vh;
+}
+
+.buttons > a > button {
+  font-size: 1.3vh;
+  padding: 1.7vh 2.2vh 1.7vh 2.2vh;
+  background-color: #94cbcb;
+}
+
+.buttons > a > button:hover {
+  font-size: 1.3vh;
+  background-color: #328f8f;
+}
+
+.buttons > button {
+  font-size: 1.3vh;
+  padding: 1.7vh 2.2vh 1.7vh 2.2vh;
+  background-color: #94cbcb;
+}
+
+.buttons > button:hover {
+  font-size: 1.3vh;
+  background-color: #328f8f;
+}
+
+/*Necesito hacer la configuracion para el modo vertical (height)*/
+
+@media (max-width: 1200px){
+  .power {
+    width: 100%;
+    margin: 30vh;
+  }
+  .form-container > h3 {
+    font-size: 2vh;
+  }
+  .form-control {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-control > div {
+    display: flex;
+    flex-direction: column;
+    width: 50vh;
+  }
+
+  .form-control > div > label {
+    font-size: 1.3vh;
+  }
+  .form-control > div > input {
+    padding: 0.9vh;
+    font-size: 1.3vh;
+  }
+  .buttons > a {
+    margin: 1vh;
+  }
+  .buttons > a > button {
+    font-size: 1.1vh;
+    width: 100%;
+  }
+  .buttons > button {
+    font-size: 1.1vh;
+    width: 50%;
+  }
+}
+
+@media (max-width: 940px){
+  .power {
+    width: 100%;
+    margin: 10vh;
+  }
+}
+
+@media (max-width: 640px){
+  .power {
+    width: 100%;
+    margin: 2vh;
+  }
+  .form-control > div {
+    width: 30vh;
+  }
+}

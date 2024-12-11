@@ -1,0 +1,22 @@
+<section class="flex justify-center">
+  <img class="absolute z-10 h-screen w-screen opacity-15" src="assets/images/background-login.jpg" alt="Imagen de fondo">
+
+  <section class="flex flex-col justify-center items-center h-screen z-20">
+    <form class="power flex flex-col align-middle justify-center h-max p-10 rounded-2xl border-gray-300 dark:border-gray-600" action="" >
+      <h1 class="flex justify-center m-3 text-3xl">Log in</h1>
+      <div class="flex flex-col">
+        <label class="mt-5 mb-3" for="">Email</label>
+        <input class="p-2 w-64 rounded-md bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-600 focus:border-blue-600 block dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="example@gmail.com" type="text">
+        <label class="mt-5 mb-3" for="">Password</label>
+        <input class=" p-2 w-64 rounded-md bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-600 focus:border-blue-600 block dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500" type="password">
+      </div>
+        <a class="flex justify-center mt-6" routerLink="forgot-password">
+          <label class="text-xs text-slate-600 hover:cursor-pointer hover:text-slate-400" for="">Forgort your password?</label>
+        </a>
+        <button class="p-3 mt-6 rounded-md" (click)="ingresar()">Enter</button>
+        <a class="flex justify-center mt-6" routerLink="register">
+          <label class="text-sm text-slate-600 hover:cursor-pointer hover:text-slate-400" for="">You don't have an account? Register</label>
+        </a>
+    </form>
+  </section>
+</section>
