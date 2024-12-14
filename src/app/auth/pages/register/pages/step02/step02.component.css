@@ -3,6 +3,11 @@
   border-width: 1px;
 }
 
+.form-control {
+  display: flex;
+  justify-content: center;
+}
+
 .form-container > h3{
   display: flex;
   justify-content: center;

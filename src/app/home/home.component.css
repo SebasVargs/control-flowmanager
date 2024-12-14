@@ -1,0 +1,118 @@
+/* Animación de aparición */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.message {
+  background-color: rgba(249, 249, 249, 0.5);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex;
+  justify-content: center;
+}
+
+/* Mostrar los mensajes cuando se les agregue la clase "visible" */
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.left-message {
+  animation: slideInLeft 1s forwards;
+}
+
+.right-message {
+  animation: slideInRight 1s forwards;
+}
+
+.content {
+  min-height: 350vh; /* Para tener suficiente espacio para hacer scroll */
+}
+
+.content-phrase {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1260px){
+  .message {
+    background-color: rgba(249, 249, 249, 0.5);
+  }
+
+  .left-message {
+    grid-column-start: 2;
+    grid-column-end: 6;
+  }
+
+  .right-message {
+    grid-column-start: 4;
+    grid-column-end: 8;
+  }
+
+  .message > div > p{
+    font-size: 2.35rem;
+  }
+}
+
+@media (max-width: 780px){
+  .message {
+    background-color: rgba(249, 249, 249, 0.5);
+  }
+
+  .left-message {
+    grid-column-start: 2;
+    grid-column-end: 6;
+  }
+
+  .right-message {
+    grid-column-start: 4;
+    grid-column-end: 8;
+  }
+
+  .message > div > p{
+    font-size: 1.75rem;
+    margin: 4rem;
+  }
+}
+
+@media (max-width: 480px){
+  .message {
+    background-color: rgba(249, 249, 249, 0.5);
+  }
+
+  .left-message {
+    grid-column-start: 2;
+    grid-column-end: 8;
+  }
+
+  .right-message {
+    grid-column-start: 2;
+    grid-column-end: 8;
+  }
+
+  .message > div > p{
+    font-size: 1.25rem;
+    margin: 1rem;
+  }
+}

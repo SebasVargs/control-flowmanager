@@ -1,2 +1,49 @@
-<h1>Estoy en el dashboard</h1>
-<router-outlet></router-outlet>
+<!-- sidebar.component.html -->
+<div class="toggle flex">
+  <!-- Sidebar -->
+  <div style="background-color: #012E40;" [ngClass]="{
+    'w-40': isSidebarOpen,
+    'w-20': !isSidebarOpen,
+    'text-white': true,
+    'h-screen': true,
+    'fixed': true,
+    'left-0': true,
+    'top-0': true,
+    'transition-all': true,
+    'duration-300': true,
+    'ease-in-out': true
+  }">
+    <!-- Botón para toggle -->
+    <button (click)="toggleSidebar()" id="sidebar" class="toogle-bar p-4 w-full flex justify-center">
+      <!-- Imagen Árbol de Navidad (cuando el sidebar está abierto) -->
+      <img *ngIf="isSidebarOpen" src="assets/images/arbol-de-navidad.png" alt="Árbol de Navidad" width="42" height="24">
+
+      <!-- Imagen Caja de Regalo (cuando el sidebar está cerrado) -->
+      <img *ngIf="!isSidebarOpen" src="assets/images/caja-de-regalo.png" alt="Caja de Regalo" width="32" height="24">
+    </button>
+
+    <!-- Menú de items -->
+    <nav class="mt-10 flex flex-col">
+      <a *ngFor="let item of menuItems" [routerLink]="[item.route]" title="{{item.label}}"
+        class="ml-1 toogle-items flex items-center justify-start p-4 transition duration-200">
+        <svg class="h-6 w-6 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.svgPath" />
+        </svg>
+        <span *ngIf="isSidebarOpen">{{ item.label }}</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Contenido principal (opcional) -->
+  <div [ngClass]="{
+      'ml-40': isSidebarOpen,
+      'ml-20': !isSidebarOpen,
+      'transition-all': true,
+      'duration-300': true,
+      'ease-in-out': true,
+      'flex-grow': true,
+      'p-4': true
+    }">
+    <router-outlet></router-outlet>
+  </div>
+</div>
