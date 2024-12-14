@@ -55,6 +55,12 @@
   align-items: center;
 }
 
+.message > div > p {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 4vh;
+}
+
 @media (max-width: 1260px){
   .message {
     background-color: rgba(249, 249, 249, 0.5);
