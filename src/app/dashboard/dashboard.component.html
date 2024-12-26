@@ -1,7 +1,6 @@
-<!-- sidebar.component.html -->
 <div class="toggle flex">
   <!-- Sidebar -->
-  <div style="background-color: #012E40;" [ngClass]="{
+  <div class="border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800" style="background-color: #012E40;" [ngClass]="{
     'w-40': isSidebarOpen,
     'w-20': !isSidebarOpen,
     'text-white': true,
@@ -24,13 +23,30 @@
 
     <!-- Menú de items -->
     <nav class="mt-10 flex flex-col">
-      <a *ngFor="let item of menuItems" [routerLink]="[item.route]" title="{{item.label}}"
-        class="ml-1 toogle-items flex items-center justify-start p-4 transition duration-200">
-        <svg class="h-6 w-6 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.svgPath" />
-        </svg>
-        <span *ngIf="isSidebarOpen">{{ item.label }}</span>
-      </a>
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Ítem Logout -->
+        <button
+          *ngIf="item.icon === 'logout'; else menuLink"
+          (click)="openLogoutModal()"
+          title="{{item.label}}"
+          class="ml-1 toogle-items border-t-2 border-t-my-color-2 flex items-center justify-start p-4 transition duration-200 cursor-pointer">
+          <svg class="h-6 w-6 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.svgPath" />
+          </svg>
+          <span *ngIf="isSidebarOpen">{{ item.label }}</span>
+        </button>
+
+        <!-- Otros ítems del menú -->
+        <ng-template #menuLink>
+          <a [routerLink]="[item.route]" title="{{item.label}}"
+            class="ml-1 toogle-items flex items-center justify-start p-4 transition duration-200">
+            <svg class="h-6 w-6 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.svgPath" />
+            </svg>
+            <span *ngIf="isSidebarOpen">{{ item.label }}</span>
+          </a>
+        </ng-template>
+      </ng-container>
     </nav>
   </div>
 
@@ -47,3 +63,32 @@
     <router-outlet></router-outlet>
   </div>
 </div>
+
+
+<!-- Modal (Ventana Emergente) -->
+<section
+  *ngIf="isOpenLogoutModal"
+  class="fixed inset-0 bg-my-color-1 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-my-color-1 text-gray-100 rounded-lg shadow-lg w-96 p-6">
+    <!-- Título -->
+    <h1 class="text-xl font-semibold mb-4 text-center">Cerrar Sesión</h1>
+    <p class="text-sm text-gray-300 text-center mb-6">
+      ¿Estás seguro de que deseas cerrar sesión?
+    </p>
+
+    <!-- Botones -->
+    <div class="flex justify-center space-x-4">
+      <button
+        (click)="acceptLogoutModal()"
+        class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+        Aceptar
+      </button>
+      <button
+        (click)="closeLogoutModal()"
+        class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</section>
+

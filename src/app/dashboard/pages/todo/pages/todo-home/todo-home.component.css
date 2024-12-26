@@ -1,0 +1,10 @@
+.scheme > div:hover{
+  transform: scale(1.01);
+}
+
+@media (max-width: 920px) {
+  .scheme {
+    display: flex;
+    flex-direction: column;
+  }
+}

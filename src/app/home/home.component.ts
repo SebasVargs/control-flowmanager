@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-interface Feature {
-  icon: string;
-  title: string;
-  description: string;
-}
+import { features } from './shared/data/features';
 
 @Component({
   selector: 'app-home',
@@ -16,29 +11,13 @@ interface Feature {
 })
 export class HomeComponent {
 
+  features = features;
+
   isVisible = {
     left: false,
     right: false
   }
   isMenuOpen = false;
-
-  features: Feature[] = [
-    {
-      icon: 'rocket',
-      title: 'Innovación Continua',
-      description: 'Soluciones tecnológicas de vanguardia que impulsan tu negocio.'
-    },
-    {
-      icon: 'shield',
-      title: 'Seguridad Garantizada',
-      description: 'Protegemos tus datos con los más altos estándares de seguridad.'
-    },
-    {
-      icon: 'star',
-      title: 'Calidad Premium',
-      description: 'Comprometidos con la excelencia en cada proyecto que desarrollamos.'
-    }
-  ];
 
   toggleMobileMenu() {
     this.isMenuOpen = !this.isMenuOpen;

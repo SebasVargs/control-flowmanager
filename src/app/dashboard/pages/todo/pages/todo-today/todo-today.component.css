@@ -1,0 +1,37 @@
+.priority > div{
+  display: flex ;
+  width: 100%;
+  justify-content: center;
+  background-color: white;
+  cursor: pointer;
+  margin: 2vh;
+  color: black;
+  padding: 0.5vh 0 0.5vh 0;
+
+}
+
+.priority-item {
+  @apply border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800;
+}
+
+.priority > div:hover{
+  background-color: #3CA6A6;
+}
+
+.priority > div:nth-child(1):hover {
+  background-color: #3CA6A6; /* Fondo diferente para el primer div */
+}
+
+.priority > div:nth-child(2):hover {
+  background-color: #026773; /* Fondo diferente para el segundo div */
+}
+
+.priority > div:nth-child(3):hover {
+  background-color: #024959; /* Fondo diferente para el tercer div */
+  color: white
+}
+
+.priority > div:nth-child(4):hover {
+  background-color: #012E40; /* Fondo diferente para el cuarto div */
+  color: white;
+}
