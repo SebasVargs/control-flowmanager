@@ -1,0 +1,24 @@
+{
+  "routes": {
+    "/": {},
+    "/dashboard": {},
+    "/dashboard/calendar": {},
+    "/dashboard/graphic": {},
+    "/dashboard/info": {},
+    "/dashboard/maps": {},
+    "/dashboard/profile": {},
+    "/dashboard/todo": {},
+    "/dashboard/todo/achieved": {},
+    "/dashboard/todo/add-task": {},
+    "/dashboard/todo/home-todo": {},
+    "/dashboard/todo/maps-todo": {},
+    "/dashboard/todo/today-todo": {},
+    "/dashboard/topics": {},
+    "/forgot-password": {},
+    "/home": {},
+    "/login": {},
+    "/register": {},
+    "/register/step2": {},
+    "/register/step3": {}
+  }
+}
