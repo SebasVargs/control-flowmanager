@@ -8,3 +8,16 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 700px){
+  .sub3-01 > div{
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 490px){
+  .title-main {
+    font-size: 1.7rem;
+  }
+}

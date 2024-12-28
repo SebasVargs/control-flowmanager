@@ -29,6 +29,7 @@ export const routes: Routes = [
   ]},
   {path: 'forgot-password', component: ForgotPasswordComponent},
   {path: 'dashboard', component: DashboardComponent, children: [
+    {path: 'settings', component: ProfileComponent},
     {path: 'profile', component: ProfileComponent},
     {path: 'calendar', component: CalendarComponent},
     {path: 'todo', component: TodoComponent, children: [

@@ -1,1 +1,55 @@
+@media (max-height: 745px){
 
+  .sidebar{
+    font-size: 0.7rem;
+  }
+
+  .sidebar-open{
+    width: 20vh;
+  }
+
+  .menu-main {
+    display: flex;
+    justify-content: center;
+    margin: 1vh;
+  }
+
+  .button-menu{
+    margin-top: 1vh;
+    margin-left: 1.7vh;
+    padding: 0.9vh;
+  }
+
+  .items-menu{
+    margin-left: 1.7vh;
+    padding: 0.9vh;
+  }
+}
+
+@media (max-height: 376px){
+
+  .sidebar{
+    font-size: 0.7rem;
+  }
+
+  .sidebar-open{
+    width: 20vh;
+  }
+
+  .menu-main {
+    display: flex;
+    justify-content: center;
+    margin: 4vh;
+  }
+
+  .button-menu{
+    margin-top: 1vh;
+    margin-left: 1.7vh;
+    padding: 0.9vh;
+  }
+
+  .items-menu{
+    margin-left: 1.7vh;
+    padding: 0.9vh;
+  }
+}

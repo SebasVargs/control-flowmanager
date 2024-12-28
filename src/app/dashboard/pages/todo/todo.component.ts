@@ -4,10 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { menuItems } from './shared/data/menu-items';
 import { settingsItems } from './shared/data/settings-items';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-todo',
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, RouterOutlet],
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, RouterOutlet, ClickOutsideDirective],
   templateUrl: './todo.component.html',
   styleUrl: './todo.component.css'
 })

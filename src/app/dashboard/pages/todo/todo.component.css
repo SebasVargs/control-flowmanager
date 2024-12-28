@@ -1,1 +1,39 @@
+@media (max-width: 920px){
+  .section-main{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .main-01{
+    flex-basis: 100%;
+  }
+
+  .main-02{
+    flex-basis: 100%;
+    order: 1;
+    margin-top: 3vh;
+  }
+
+  .main-01, .main-03 {
+    flex: 1;
+  }
+
+  .main-03{
+    display: flex;
+    justify-content: end;
+  }
+}
+
+@media (max-height: 376px){
+  .main-02 {
+    margin-top: 10vh;
+  }
+}
+
+@media (max-height: 745px){
+
+  .contain-drop {
+    z-index: 10;
+  }
+}
 
