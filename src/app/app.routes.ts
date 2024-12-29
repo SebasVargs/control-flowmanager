@@ -18,6 +18,7 @@ import { TodoMapsComponent } from './dashboard/pages/todo/pages/todo-maps/todo-m
 import { TodoTodayComponent } from './dashboard/pages/todo/pages/todo-today/todo-today.component';
 import { TodoHomeComponent } from './dashboard/pages/todo/pages/todo-home/todo-home.component';
 import { ProfileComponent } from './dashboard/auth/profile/profile.component';
+import { InterfViewComponent } from './dashboard/pages/todo/pages/todo-today/pages/interf-view/interf-view.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -37,7 +38,9 @@ export const routes: Routes = [
       {path: 'add-task', component: AddTaskComponent},
       {path: 'achieved', component: AchievedComponent},
       {path: 'maps-todo', component: TodoMapsComponent},
-      {path: 'today-todo', component: TodoTodayComponent}
+      {path: 'today-todo', component: TodoTodayComponent, children: [
+        {path: 'interf-view', component: InterfViewComponent}
+      ]}
     ]},
     {path: 'maps', component: MapsComponent},
     {path: 'graphic', component: GraphicComponent},
