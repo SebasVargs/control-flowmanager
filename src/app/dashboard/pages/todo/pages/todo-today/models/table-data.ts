@@ -3,37 +3,37 @@ import { TableExample } from "./table-example";
 export const tableData: TableExample[] = [
   {
     title: "hola",
-    make_date: "2024-02-13",
+    make_date: "2024-12-01",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },
   {
     title: "hola1",
-    make_date: "2024-02-13",
+    make_date: "2024-02-24",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },
   {
     title: "hola2",
-    make_date: "2024-02-13",
+    make_date: "2024-02-28",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },
   {
     title: "hola3",
-    make_date: "2024-02-13",
+    make_date: "2024-02-29",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },
   {
     title: "hola4",
-    make_date: "2024-02-13",
+    make_date: "2024-02-10",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },
   {
     title: "hola5",
-    make_date: "2024-02-13",
+    make_date: "2024-02-03",
     limit_date: '2024-03-14',
     complexity: 'Low'
   },

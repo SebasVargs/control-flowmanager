@@ -1,8 +1,8 @@
 export interface MenuItems {
-  icon: String;
-  label: String;
-  route?: String;
-  svgPath?: String;
+  icon: string;
+  label: string;
+  route?: string;
+  svgPath?: string;
   onClick?: () => void;
 }
 

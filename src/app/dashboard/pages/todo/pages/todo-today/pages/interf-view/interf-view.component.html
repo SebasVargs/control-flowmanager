@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-center">
+<div class="main-content flex flex-row justify-center">
   <div class="w-full p-1 hover:scale-100">
 
     <div>
@@ -51,7 +51,7 @@
         </thead>
         <tbody class="bg-my-color-2 divide-y divide-gray-800">
           <tr
-            *ngFor="let tablee of tableData">
+            *ngFor="let tablee of tableDataa">
             <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
               <div>
                 <div class="text-gray-100">
@@ -65,20 +65,41 @@
                 {{ tablee.title }}
               </div>
             </td>
-            <td class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
+            <td *ngIf="!tablee.isEditingMake" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
               <div class="flex flex-col justify-center items-center">
                 {{ tablee.make_date }}
-                <button class="mt-1">
+                <button (click)="showFormatMake(tablee)" class="mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
                 </button>
               </div>
             </td>
-            <td class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
+
+            <td *ngIf="tablee.isEditingMake" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
+              <div class="flex flex-col justify-center items-center">
+                {{ formattedDate }}
+                <button (click)="hiddeFormatMake(tablee)"  class="mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td *ngIf="!tablee.isEditingLimit" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
               <div class="flex flex-col justify-center items-center">
                 {{ tablee.limit_date }}
-                <button class="mt-1">
+                <button (click)="showFormatLimit(tablee)" class="mt-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+            <td *ngIf="tablee.isEditingLimit" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-200">
+              <div class="flex flex-col justify-center items-center">
+                {{ formattedDate }}
+                <button (click)="hiddeFormatLimit(tablee)" class="mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>

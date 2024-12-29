@@ -1,6 +1,9 @@
 export interface TableExample {
-  title: String;
-  make_date: String;
-  limit_date: String;
-  complexity: String;
+  title: string;
+  make_date: string;
+  limit_date: string;
+  complexity: string;
+  isEditingMake?: boolean;
+  isEditingLimit?: boolean;
+
 }
