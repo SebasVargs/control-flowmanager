@@ -1,1 +1,151 @@
-<p>add-task works!</p>
+<span class="text-slate-500">Task / add-task</span>
+<h1 class="title-main flex text-3xl mb-4">Add Tasks</h1>
+
+<section>
+  <div class="container mx-auto p-4 max-w-4xl">
+    <div
+      class="bg-white rounded-lg shadow-lg p-6 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+
+      <!--Avatar URL-->
+      <div class="flex items-center mr-5 mb-5">
+        <label class="ml-2 block text-sm text-gray-700">AvatarUrl?</label>
+      </div>
+
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Left Column -->
+          <div class="space-y-4">
+            <!-- Title -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Title</label>
+              <input type="text" formControlName="title"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                maxlength="25">
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Description</label>
+              <textarea formControlName="description"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                rows="4" maxlength="512"></textarea>
+            </div>
+
+            <!-- Dates -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Make Date</label>
+                <input type="date" formControlName="make_date"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Limit Date</label>
+                <input type="date" formControlName="limit_date"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+              </div>
+            </div>
+
+            <!-- Maps Checkbox -->
+             <div class="flex flex-row">
+
+              <div class="flex items-center mr-5">
+                <input type="checkbox" (click)="showMaps()"
+                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label class="ml-2 block text-sm text-gray-700">Course?</label>
+              </div>
+
+              <div class="flex items-center">
+                <input type="checkbox" (click)="showCourse()"
+                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <label class="ml-2 block text-sm text-gray-700">Maps?</label>
+              </div>
+
+             </div>
+
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4">
+            <!-- Priority -->
+             <div class="flex flex-col items-center">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                <div class="flex space-x-4">
+                  <ng-container *ngFor="let priorities of prioritiesTask">
+                    <button type="button" (click)="setPriority(priorities)"
+                      [class.bg-my-color-3]="taskForm.get('id_priority')?.value === priorities.id"
+                      [class.bg-gray-200]="taskForm.get('id_priority')?.value !== priorities.id" class="px-4 py-2 rounded-md">
+                      {{priorities.id}}
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+
+              <!-- Complexity -->
+              <div class="mt-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Complexity</label>
+                <div class="flex space-x-4">
+                  <ng-container *ngFor="let complexity of complexitiesTask">
+                    <button type="button" (click)="setComplexity(complexity)"
+                      [class.bg-my-color-3]="taskForm.get('id_estimation')?.value === complexity.id"
+                      [class.bg-gray-200]="taskForm.get('id_estimation')?.value !== complexity.id" class="px-4 py-2 rounded-md">
+                      {{complexity.id}}
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+             </div>
+
+            <!-- Category -->
+            <div class="flex flex-row justify-evenly pt-4">
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 w-full">Category</label>
+                <select formControlName="id_category_task"
+                  class="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                  <option value="">Select a category</option>
+                  <option *ngFor="let category of categoriesTask" [value]="category.id">{{category.name}}</option>
+                </select>
+              </div>
+
+              <!-- Status -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 w-full">Status</label>
+                <select formControlName="id_status_task"
+                  class="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                  <option value="">Select a status</option>
+                  <option *ngFor="let status of statusTask" [value]="status.id">{{status.name}}</option>
+                </select>
+              </div>
+
+            </div>
+
+            <!-- Course -->
+            <div class="mr-8 ml-10" *ngIf="hashCourse">
+              <label class="block text-sm font-medium text-gray-700">Course</label>
+              <select formControlName="id_course"
+                class="mt-1 block w-full pt-2 pb-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">Select a course</option>
+                <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+              </select>
+            </div>
+
+            <!-- Maps Area -->
+            <div *ngIf="hashMaps" class="border-2 border-gray-300 rounded-lg p-4 h-48">
+              <!-- Maps integration would go here -->
+              <p class="text-gray-500 text-center">Maps Area</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6">
+          <button type="submit"
+            class="w-full bg-my-color-3 text-white py-2 px-4 rounded-md hover:bg-my-color-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            Agregar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

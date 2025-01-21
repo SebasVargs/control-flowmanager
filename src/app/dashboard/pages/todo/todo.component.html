@@ -2,7 +2,7 @@
   <div class="absolute top-20 flex items-start justify-center z-0 h-20 opacity-5 pointer-events-none">
     <img class="w-4/6" src="assets/images/rb_25881.png" alt="">
   </div>
-  <div class="main-01 relative">
+  <div class="main-01 relative z-30">
     <!-- Botón del dropdown -->
     <button
       class="flex bg-my-color-3 w-40 text-white px-4 py-2 focus:outline-none justify-center border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800"
@@ -47,7 +47,7 @@
   </div>
 
   <!-- Navigation to Pages -->
-  <div class="main-02 flex flex-col w-full mt-2 pl-4 z-1">
+  <div class="main-02 flex flex-col w-full mt-2 pl-6 z-1">
     <router-outlet></router-outlet>
   </div>
 
@@ -64,7 +64,7 @@
 
     <!-- Contenedor del menú que será mostrado/ocultado -->
     <div *ngIf="configOpen" appClickOutside (clickOutside)="configDropdown()"
-      class="absolute right-0 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      class="absolute right-0 mt-2 w-32 origin-top-right rounded-md bg-white text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
       <div *ngFor="let config of configItems" class="py-1 flex flex-row justify-between p-4 mt-3 mb-3 cursor-pointer">
 
         <button

@@ -1,11 +1,312 @@
-<h1 class="flex justify-center items-center text-4xl mb-5 z-30">Today Task</h1>
-<div>
-  <h1 class="flex justify-center items-center text-lg mb-5">Priority</h1>
-  <div class="priority flex flex-row-reverse">
-    <div *ngFor="let priorities of prioritiesTask" class="priority-item">{{priorities.name}}</div>
+<div class="flex justify-between mr-6">
+  <span class="text-slate-500">Task / today</span>
+  <div class="navbar-main flex flex-row">
+
+    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+      <span>Course</span>
+    </a>
+    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+      <span>Status</span>
+    </a>
+    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+      <span>Hability</span>
+    </a>
+    <a routerLink="../add-task" class="ml-2 cursor-pointer bg-my-color-3 text-slate-50 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-my-color-2 hover:scale-105 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+      <span>Add Task</span>
+    </a>
   </div>
-  <div class="mt-8">
-    <app-interf-view></app-interf-view>
+</div>
+<h1 class="title-main flex text-3xl mb-4">Today task</h1>
+<div class="m-1">
+  <h1 class="flex text-lg">Priority</h1>
+  <div *ngIf="!isEditingFilter" class="flex">
+    <button class="flex justify-center items-center p-2 text-black hover:bg-slate-200"
+      (click)="cancelFilterPriorities()" aria-label="Cancel">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+        class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="priority-main flex flex-row-reverse gap-1 ml-2 mr-2">
+    <div class="priority flex flex-row space-x-4">
+      <div *ngFor="let priority of priorities" class="priority-item cursor-pointer rounded-lg px-2 py-1 text-white"
+        [ngClass]="{
+          'bg-slate-300': selectedPriority === priority.name,
+          'hover:bg-white': selectedPriority !== priority.name
+        }" (click)="filterPriorities(priority.name)">
+        {{ priority.name }}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="flex flex-col mt-4">
+    <div class="main-content flex flex-row justify-center">
+      <div class="w-full p-1 hover:scale-100">
+
+        <div>
+          <input type="search" [(ngModel)]="searchText" id="form1" class="form-control" placeholder="Search"
+            aria-label="search"
+            class="rounded-sm mb-1 block w-full py-2 pr-5 text-gray-100 md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-white dark:text-gray-800 focus:border-my-color-2 dark:focus:border-my-color-2 focus:ring-my-color-2 focus:outline-none focus:ring focus:ring-opacity-10 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+        </div>
+
+        <div class="overflow-hidden border border-gray-200 max-h-96 overflow-y-auto">
+          <table
+            class="min-w-full divide-y divide-gray-800 dark:divide-gray-700 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+            <thead class="bg-my-color-3 sticky top-0">
+              <tr>
+                <th scope="col"
+                  class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  Id
+                </th>
+
+                <th scope="col"
+                  class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  <button class="flex items-center gap-x-3 focus:outline-none">
+                    <span>Title</span>
+
+                    <svg class="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z"
+                        fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+                      <path
+                        d="M0.722656 9.60832L3.09974 6.78633H0.811638V5.87109H4.35819V6.78633L2.01925 9.60832H4.43446V10.5617H0.722656V9.60832Z"
+                        fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+                      <path
+                        d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z"
+                        fill="currentColor" stroke="currentColor" stroke-width="0.3" />
+                    </svg>
+                  </button>
+                </th>
+
+                <th scope="col"
+                  class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  Make_date
+                </th>
+
+                <th scope="col"
+                  class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  Limit_date</th>
+                <th scope="col"
+                  class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  Estimation</th>
+
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-800">
+              <tr *ngFor="let task of tasks" (click)="selectItem(task)"
+                [ngClass]="{'bg-slate-100': selectedTask === task}">
+                <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                  <div>
+                    <div class="text-gray-800">
+                      {{ task.index }}
+                    </div>
+                  </div>
+                </td>
+                <!--NgIf for name in update-->
+                <td
+                  class="scrollable-cell px-2 py-4 text-sm font-medium max-w-[10rem] whitespace-nowrap overflow-x-auto">
+                  <div class="inline-block px-3 py-2 text-sm rounded-full text-emerald-600 gap-x-2">
+                    {{ task.title }}
+                  </div>
+                </td>
+                <td *ngIf="!task.isEditingMake" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
+                  <div class="flex flex-col justify-center items-center">
+                    {{ task.formattedMakeDate || task.make_date }}
+                    <button (click)="showFormatMake(task)" class="mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+
+                <td *ngIf="task.isEditingMake" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
+                  <div class="flex flex-col justify-center items-center">
+                    {{ formattedDate || task.make_date }}
+                    <button (click)="hiddeFormatMake(task)" class="mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+                <td *ngIf="!task.isEditingLimit"
+                  class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
+                  <div class="flex flex-col justify-center items-center">
+                    {{ task.formattedLimitDate || task.limit_date }}
+                    <button (click)="showFormatLimit(task)" class="mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+                <td *ngIf="task.isEditingLimit" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
+                  <div class="flex flex-col justify-center items-center">
+                    {{ formattedDate || task.limit_date }}
+                    <button (click)="hiddeFormatLimit(task)" class="mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap text-green-500">
+                  <div>
+                    <div class="tasks-complexity flex flex-row space-x-4">
+                      <div class="task-complexity-item">
+                        <div class="px-4 py-2 rounded-lg text-white" [ngClass]="{
+                            'bg-gray-600': task.id_estimation.name === 'Without',
+                            'bg-green-700': task.id_estimation.name === 'Low',
+                            'bg-yellow-600': task.id_estimation.name === 'Medium',
+                            'bg-red-700': task.id_estimation.name === 'High'
+                          }">
+                          {{ task.id_estimation.name }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div *ngIf="selectedTask"
+        class="flex flex-col bg-white text-black w-full p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-100 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+        <!-- Header -->
+        <div class="flex justify-between items-center border-b border-slate-white pb-2 mb-4">
+          <div class="flex flex-row justify-center align-middle">
+            <div class="w-8 h-8 mr-8">
+              <button class="flex justify-center items-center p-2 text-black hover:bg-slate-100"
+                (click)="hiddeDescripTask()" aria-label="Cancel">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                  stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <h1 *ngIf="!selectedTask.isEditingDates" class="text-xl font-semibold">{{ selectedTask.title }}</h1>
+            <input *ngIf="selectedTask.isEditingDates" type="text" placeholder="Edit description..."
+              class="w-96 p-2 rounded-md bg-white text-black border border-slate-600 shadow-md"
+              value="{{ selectedTask.title }}">
+          </div>
+          <div class="ml-6 flex items-center">
+            <span class="flex justify-center px-3 py-2 w-24 rounded-full bg-blue-500 text-white text-sm font-medium">
+              {{ selectedTask.id_status.name }}
+            </span>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-md">
+          <!-- Description -->
+          <div class="mb-4">
+            <h1 class="text-lg font-semibold mb-1">Description</h1>
+            <p *ngIf="!selectedTask.isEditingDates" class="text-sm text-gray-700">{{ selectedTask.description }}</p>
+            <input *ngIf="selectedTask.isEditingDates" type="text" placeholder="Edit description..."
+              class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-600 shadow-md"
+              value="{{ selectedTask.description }}">
+          </div>
+
+          <!-- Calendar -->
+          <div class="mb-4">
+            <h1 class="text-lg font-semibold mb-3">Calendar</h1>
+            <div class="flex flex-col gap-3">
+              <div>
+                <h2 class="text-sm font-medium mb-1 text-gray-800">Make Date</h2>
+                <input *ngIf="selectedTask.isEditingDates" type="date"
+                  class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-800"
+                  value="{{ selectedTask.make_date }}">
+                <span class="text-red-700" *ngIf="!selectedTask.isEditingDates">{{ selectedTask.formattedMakeDate }}</span>
+              </div>
+              <div>
+                <h2 class="text-sm font-medium mb-1 text-gray-800">Limit Date</h2>
+                <input *ngIf="selectedTask.isEditingDates" type="date"
+                  class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-600"
+                  value="{{ selectedTask.limit_date }}">
+                <span class="text-red-700" *ngIf="!selectedTask.isEditingDates">{{ selectedTask.formattedLimitDate }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Maps -->
+          <div class="mb-4">
+            <h1 class="text-lg font-semibold mb-2">Maps</h1>
+            <p class="text-sm text-gray-800">
+              Maps que estará si la tarea tiene que realizarse físicamente.
+            </p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex justify-end gap-4 mt-4">
+            <button *ngIf="!selectedTask.isEditingDates" (click)="openDeleteTask(selectedTask.id)"
+
+              class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-md shadow-md transition-colors duration-300">
+              Eliminate
+            </button>
+            <button *ngIf="!selectedTask.isEditingDates" (click)="toggleEditDates(selectedTask)"
+              class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md shadow-md transition-colors duration-300">
+              Update
+            </button>
+            <button *ngIf="selectedTask.isEditingDates" (click)="toggleEditDates(selectedTask)"
+              class="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded-md shadow-md transition-colors duration-300">
+              Cancel
+            </button>
+            <button *ngIf="selectedTask.isEditingDates"
+              class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-300">
+              Update
+            </button>
+            <button *ngIf="!selectedTask.isEditingDates"
+              class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-300">
+              Complete
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 </div>
 
+<!-- Modal (Ventana Emergente) -->
+<section
+  *ngIf="isDeleteTask"
+  class="fixed inset-0 bg-my-color-1 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-my-color-1 text-gray-100 rounded-lg shadow-lg w-96 p-6">
+    <!-- Título -->
+    <h1 class="text-xl font-semibold mb-4 text-center">Borrar Tarea</h1>
+    <p class="text-sm text-gray-300 text-center mb-6">
+      ¿Estás seguro de que deseas eliminar la tarea?
+    </p>
+
+    <!-- Botones -->
+    <div class="flex justify-center space-x-4">
+      <button
+        (click)="acceptLogoutModal()"
+        class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
+        Aceptar
+      </button>
+      <button
+        (click)="closeLogoutModal()"
+        class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</section>

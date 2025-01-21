@@ -2,8 +2,15 @@
   transform: scale(1.01);
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1480px){
   .scheme {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1380px){
+  .all-container{
     display: flex;
     flex-direction: column;
   }
@@ -21,3 +28,78 @@
     font-size: 1.7rem;
   }
 }
+.priority-main > div {
+  display: flex;
+  width: 100%;
+}
+
+.priority-item {
+  display: flex ;
+  width: 100%;
+  justify-content: center;
+  color: black;
+  padding: 0.2vh 0 0.2vh 0;
+  margin-top: 2vh;
+}
+
+.priority-item {
+  @apply border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800;
+}
+
+.priority-item:focus {
+  background-color: #16a34a; /* Verde */
+  outline: none; /* Remueve el borde azul estándar */
+}
+
+.priority-item:active {
+  background-color: #15803d; /* Verde más oscuro */
+}
+
+
+.priority-item:hover{
+  background-color: #c8dede;
+}
+
+@media (max-width: 800px) {
+
+  .title-prio{
+    margin-bottom: 1vh;
+  }
+
+  .priority > div{
+    margin: 1px;
+  }
+  .priority-item{
+    margin-top: 10vh;
+    font-size: 0.7rem;
+  }
+
+  .navbar-main {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 1350px){
+  .main-content{
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 1750px) {
+  .all-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .wrap-01, .wrap-02 {
+    flex: 1; /* Asegura que ambas ocupen el mismo espacio disponible */
+  }
+
+  .wrap-03 {
+    flex-basis: 100%; /* Ocupa toda la fila */
+    order: 1; /* Siempre aparece en una nueva fila después de wrap-01 y wrap-02 */
+    margin-top: 2vh; /* Espaciado superior opcional */
+  }
+}
+

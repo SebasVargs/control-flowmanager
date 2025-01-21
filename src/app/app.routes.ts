@@ -18,7 +18,13 @@ import { TodoMapsComponent } from './dashboard/pages/todo/pages/todo-maps/todo-m
 import { TodoTodayComponent } from './dashboard/pages/todo/pages/todo-today/todo-today.component';
 import { TodoHomeComponent } from './dashboard/pages/todo/pages/todo-home/todo-home.component';
 import { ProfileComponent } from './dashboard/auth/profile/profile.component';
-import { InterfViewComponent } from './dashboard/pages/todo/pages/todo-today/pages/interf-view/interf-view.component';
+import { CoursesComponent } from './dashboard/pages/calendar/pages/courses/courses.component';
+import { HabilitiesComponent } from './dashboard/pages/calendar/pages/habilities/habilities.component';
+import { InfoDevelopmentComponent } from './dashboard/pages/info/pages/info-card/pages/info-development/info-development.component';
+import { InfoMedicineComponent } from './dashboard/pages/info/pages/info-card/pages/info-medicine/info-medicine.component';
+import { InfoInvestingComponent } from './dashboard/pages/info/pages/info-card/pages/info-investing/info-investing.component';
+import { InfoWorkoutComponent } from './dashboard/pages/info/pages/info-card/pages/info-workout/info-workout.component';
+import { FinanceComponent } from './dashboard/pages/finance/finance.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -32,20 +38,28 @@ export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, children: [
     {path: 'settings', component: ProfileComponent},
     {path: 'profile', component: ProfileComponent},
-    {path: 'calendar', component: CalendarComponent},
+    {path: 'calendar', component: CalendarComponent, children: [
+      {path: 'courses', component: CoursesComponent},
+      {path: 'habilities', component: HabilitiesComponent}
+    ]},
     {path: 'todo', component: TodoComponent, children: [
       {path: 'home-todo', component: TodoHomeComponent},
       {path: 'add-task', component: AddTaskComponent},
       {path: 'achieved', component: AchievedComponent},
       {path: 'maps-todo', component: TodoMapsComponent},
-      {path: 'today-todo', component: TodoTodayComponent, children: [
-        {path: 'interf-view', component: InterfViewComponent}
-      ]}
+      {path: 'today-todo', component: TodoTodayComponent}
     ]},
+    {path: 'finance', component: FinanceComponent},
     {path: 'maps', component: MapsComponent},
     {path: 'graphic', component: GraphicComponent},
     {path: 'topics', component: TopicsComponent},
-    {path: 'info', component: InfoComponent},
+    {path: 'info', component: InfoComponent, children: [
+
+    ]},
+    {path: 'development', component: InfoDevelopmentComponent},
+    {path: 'medicine', component: InfoMedicineComponent},
+    {path: 'investing', component: InfoInvestingComponent},
+    {path: 'workout', component: InfoWorkoutComponent},
   ]},
   {path: '**', redirectTo: ''}
 ];

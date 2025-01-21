@@ -1,3 +1,4 @@
 export interface PriorityTasks{
-  name: String;
+  id?: number;
+  name: string;
 }

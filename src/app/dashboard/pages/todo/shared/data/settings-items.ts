@@ -1,4 +1,4 @@
-import { SettingsItems } from "../../models/category-items";
+import { SettingsItems } from "../../models/SettingItems";
 
 export const settingsItems: SettingsItems[] = [
   {

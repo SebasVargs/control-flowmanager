@@ -1,4 +1,4 @@
-@media (max-width: 920px){
+@media (max-width: 1000px){
   .section-main{
     display: flex;
     flex-wrap: wrap;
@@ -37,3 +37,21 @@
   }
 }
 
+@media (max-width: 800px) {
+
+  .title-prio{
+    margin-bottom: 1vh;
+  }
+
+  .priority > div{
+    margin: 1px;
+  }
+  .priority-item{
+    margin-top: 10vh;
+    font-size: 0.7rem;
+  }
+
+  .navbar-main {
+    font-size: 0.7rem;
+  }
+}
