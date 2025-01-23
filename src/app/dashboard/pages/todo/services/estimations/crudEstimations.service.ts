@@ -12,6 +12,10 @@ export class CrudEstimationsService {
   private apiUrl: string = `${environment.apiUrl}/${environment.apiRoutes.tasks.base}`
   private http = inject(HttpClient)
 
+  getApiUrl():string {
+    return `${this.apiUrl}/${environment.apiRoutes.tasks.others[1].base}`
+  }
+
   getEstimations(): Observable<EstimationTask[]>{
     return this.http.get<EstimationTask[]>(`${this.apiUrl}/${environment.apiRoutes.tasks.others[1].base}`).pipe(
       catchError(err => {

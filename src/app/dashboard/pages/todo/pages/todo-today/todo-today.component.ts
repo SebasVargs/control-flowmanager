@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PriorityTasks } from '../../models/PriorityTask';
-import { monthItems } from '../../../../shared/data/months';
+import { monthItems } from '../../../../shared/data/month-items';
 import { CrudTasksService } from '../../services/tasks/crudTasks.service';
 import { Task } from '../../models/Task';
 import { CrudEstimationsService } from '../../services/estimations/crudEstimations.service';
@@ -10,6 +10,8 @@ import { EstimationTask } from '../../models/EstimationTask';
 import { CrudCategoriesService } from '../../services/categories/CrudCategories.service';
 import { CategoryTask } from '../../models/CategoryTask';
 import { CrudPriorityService } from '../../services/priorities/CrudPriority.service';
+import { GeneralDataService } from '../../../../../core/services/generalData.service';
+import { environment } from '../../../../../../environments/environment';
 @Component({
   selector: 'app-todo-today',
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
@@ -18,15 +20,13 @@ import { CrudPriorityService } from '../../services/priorities/CrudPriority.serv
 })
 export class TodoTodayComponent implements OnInit {
 
-  isDeleteTask = false;
+  isEditingFilter: boolean = true;
+  isDateFormat: boolean = false;
+  isDeleteTask: boolean = false;
   taskId: number = 0;
 
-
   formattedDate: string = '';
-  isDateFormat: boolean = false;
   months = monthItems
-  isEditingFilter: boolean = true;
-
   selectedTask: any;
 
   searchText: String = '';
@@ -36,65 +36,38 @@ export class TodoTodayComponent implements OnInit {
   categories: CategoryTask[] = []
   estimations: EstimationTask[] = []
   tasks: Task[] = []
-
+  filteredTask: Task[] = []
   selectedPriority: string = '';
-  filteredTask: any[] = []
 
   private serviceTasks = inject(CrudTasksService)
   private serviceEstimations = inject(CrudEstimationsService)
   private serviceCategories = inject(CrudCategoriesService)
   private servicePriorities = inject(CrudPriorityService)
+  private generalData = inject(GeneralDataService)
+
+  readonly urlCategories: string = `${this.serviceCategories.getApiUrl()}`
+  readonly urlPriorities: string = `${this.servicePriorities.getApiUrl()}`
+  readonly urlTasks: string = `${this.serviceTasks.getApiUrl()}`
+  readonly urlEstimation: string = `${this.serviceEstimations.getApiUrl()}`
 
   ngOnInit(): void {
-    this.getEstimations()
-    this.getTasks()
-    this.getPriorities()
+    this.loadData<EstimationTask>(`${this.urlEstimation}`, 'estimations')
+    this.loadData<Task>(`${this.urlTasks}`, 'tasks')
+    this.loadData<CategoryTask>(`${this.urlCategories}`, 'categories')
+    this.loadData<PriorityTasks>(`${this.urlPriorities}`, 'priorities')
   }
 
   //START GETS SERVICES
 
-  getCategories(): void{
-    this.serviceCategories.getCategories().subscribe({
-      next: (data) => {
-        this.categories = data.map((category: CategoryTask, index: number) => ({
-          ...category,
-          index: index + 1
-        }))
+  private loadData<T>(url: string, target: keyof this & string): void {
+    this.generalData.getDataWithIndex(url).subscribe({
+      next: (data: T[]) => {
+        (this[target] as T[]) = data;
+      },
+      error: (err) => {
+        console.error(`Error cargando datos desde ${url}`, err)
       }
-    })
-  }
-
-  getPriorities():void {
-    this.servicePriorities.getPriorities().subscribe({
-      next: (data) => {
-        this.priorities = data.map((priority: PriorityTasks, index: number) => ({
-          ...priority,
-          index: index + 1
-        }))
-      }
-    })
-  }
-
-  getTasks(): void{
-    this.serviceTasks.getTasks().subscribe({
-      next: (data) => {
-        this.tasks = data.map((task: Task, index: number) => ({
-          ...task,
-          index: index + 1
-        }))
-      }
-    })
-  }
-
-  getEstimations(): void{
-    this.serviceEstimations.getEstimations().subscribe({
-      next: (data) => {
-        this.estimations = data.map((estimation: EstimationTask, index: number) => ({
-          ...estimation,
-          index: index + 1
-        }))
-      }
-    })
+    });
   }
 
   //END GETS SERVICES
@@ -177,8 +150,9 @@ export class TodoTodayComponent implements OnInit {
 
   filterPriorities(priority: string): void {
     this.selectedPriority = priority; // Establece la prioridad seleccionada
+
     // Aquí debes traer las tareas con el servicio adecuado
-    this.serviceTasks.getTasks().subscribe({
+    this.generalData.getDataWithIndex(`${this.urlTasks}`).subscribe({
       next: (data: any) => {
         // Filtra las tareas por la prioridad seleccionada
         this.tasks = data.filter((task: any) => task.id_priority.name === priority);
@@ -199,7 +173,7 @@ export class TodoTodayComponent implements OnInit {
   cancelFilterPriorities(){
     this.isEditingFilter = true;
     this.selectedPriority = '';
-    //this.tasks = this.getTasks();
+    this.loadData<Task>(`${this.urlTasks}`, 'tasks')
   }
 
   //END FILTERS

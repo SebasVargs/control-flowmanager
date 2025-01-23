@@ -20,6 +20,23 @@ export const environment = {
         {
           base: 'priorities',
           byId: (id: number) => `priorities/${id}`
+        },
+        {
+          base: 'status_tasks',
+          byId: (id: number) => `status_tasks/${id}`
+        }
+      ]
+    },
+    schedule: {
+      base: 'schedule',
+      others: [
+        {
+          base: 'course',
+          byId: (id: number) => `course/${id}`
+        },
+        {
+          base: 'schedule',
+          byId: (id: number) => `schedule/${id}`
         }
       ]
     }

@@ -1,23 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute, NavigationEnd, RouterLink, RouterOutlet } from '@angular/router';
-import { settingsItems } from '../todo/shared/data/settings-items';
-import { monthItems } from '../../shared/data/month-items';
-import { menuItems } from '../../shared/data/menu-items';
-import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-import { filter } from 'rxjs/operators';
-import { CrudScheduleService } from './services/schedule/CrudSchedule.service';
-import { dayWeek } from './shared/data/day-items';
+import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
+import { menuItems } from '../../../../shared/data/menu-items';
+import { monthItems } from '../../../../shared/data/month-items';
+import { settingsItems } from '../../../todo/shared/data/settings-items';
+import { CrudScheduleService } from '../../services/schedule/CrudSchedule.service';
+import { Router } from '@angular/router';
+import { dayWeek } from '../../shared/data/day-items';
 
 @Component({
-  selector: 'app-calendar',
-  imports: [RouterOutlet, RouterLink, CommonModule, ReactiveFormsModule, FormsModule, ClickOutsideDirective],
-  templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css'
+  selector: 'app-assign-calendar',
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  templateUrl: './assign-calendar.component.html',
+  styleUrl: './assign-calendar.component.css'
 })
-export class CalendarComponent implements OnInit {
-
+export class AssignCalendarComponent {
   currentRoute: string = 'home'; // Ruta inicial
 
   isOpenCourses: boolean = false
@@ -74,9 +73,9 @@ export class CalendarComponent implements OnInit {
   }
 
   getSchedule(): void {
+    this.calendar = {};
     this.serviceSchedule.getSchedule().subscribe({
       next: (data) => {
-        console.log(data)
         // Inicializar el calendario
         this.days.forEach(day => {
           this.calendar[day.name] = {}; // Asume que `day.name` es el nombre del día

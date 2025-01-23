@@ -20,7 +20,7 @@
               <label class="block text-sm font-medium text-gray-700">Title</label>
               <input type="text" formControlName="title"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                maxlength="25">
+                maxlength="100">
             </div>
 
             <!-- Description -->
@@ -49,13 +49,13 @@
              <div class="flex flex-row">
 
               <div class="flex items-center mr-5">
-                <input type="checkbox" (click)="showMaps()"
+                <input type="checkbox" (click)="toggleProperty('hashCourse')"
                   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                 <label class="ml-2 block text-sm text-gray-700">Course?</label>
               </div>
 
               <div class="flex items-center">
-                <input type="checkbox" (click)="showCourse()"
+                <input type="checkbox" (click)="toggleProperty('hashMaps')"
                   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                 <label class="ml-2 block text-sm text-gray-700">Maps?</label>
               </div>
@@ -71,7 +71,7 @@
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
                 <div class="flex space-x-4">
-                  <ng-container *ngFor="let priorities of prioritiesTask">
+                  <ng-container *ngFor="let priorities of priorities">
                     <button type="button" (click)="setPriority(priorities)"
                       [class.bg-my-color-3]="taskForm.get('id_priority')?.value === priorities.id"
                       [class.bg-gray-200]="taskForm.get('id_priority')?.value !== priorities.id" class="px-4 py-2 rounded-md">
@@ -85,7 +85,7 @@
               <div class="mt-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complexity</label>
                 <div class="flex space-x-4">
-                  <ng-container *ngFor="let complexity of complexitiesTask">
+                  <ng-container *ngFor="let complexity of estimations">
                     <button type="button" (click)="setComplexity(complexity)"
                       [class.bg-my-color-3]="taskForm.get('id_estimation')?.value === complexity.id"
                       [class.bg-gray-200]="taskForm.get('id_estimation')?.value !== complexity.id" class="px-4 py-2 rounded-md">
@@ -104,7 +104,7 @@
                 <select formControlName="id_category_task"
                   class="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                   <option value="">Select a category</option>
-                  <option *ngFor="let category of categoriesTask" [value]="category.id">{{category.name}}</option>
+                  <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
                 </select>
               </div>
 
@@ -114,7 +114,7 @@
                 <select formControlName="id_status_task"
                   class="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                   <option value="">Select a status</option>
-                  <option *ngFor="let status of statusTask" [value]="status.id">{{status.name}}</option>
+                  <option *ngFor="let status of status" [value]="status.id">{{status.name}}</option>
                 </select>
               </div>
 

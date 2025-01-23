@@ -5,8 +5,6 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { menuItems } from './shared/data/menu-items';
 import { settingsItems } from './shared/data/settings-items';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-import { monthItems } from '../../shared/data/months';
-
 @Component({
   selector: 'app-todo',
   imports: [RouterLink, CommonModule, ReactiveFormsModule, RouterOutlet, ClickOutsideDirective],
@@ -15,7 +13,6 @@ import { monthItems } from '../../shared/data/months';
 })
 export class TodoComponent implements OnInit {
 
-  months = monthItems
   isOpenLogoutModal = false;
   height: String = '100vh';
   itemsDrop = menuItems;

@@ -3,50 +3,50 @@ import { Months } from "../../models/Months";
 export const monthItems: Months[] = [
   {
     id: 1,
-    name: "January"
+    name: 'January'
   },
   {
     id: 2,
-    name: "February"
+    name: 'February'
   },
   {
     id: 3,
-    name: "March"
-  },
-  {
-    id: 4,
-    name: "April"
+    name: 'March'
   },
   {
     id: 5,
-    name: "May"
+    name: 'April'
+  },
+  {
+    id: 5,
+    name: 'May'
   },
   {
     id: 6,
-    name: "June"
+    name: 'June'
   },
   {
     id: 7,
-    name: "July"
+    name: 'January'
   },
   {
     id: 8,
-    name: "August"
+    name: 'August'
   },
   {
     id: 9,
-    name: "September"
+    name: 'September'
   },
   {
     id: 10,
-    name: "October"
+    name: 'October'
   },
   {
     id: 11,
-    name: "November"
+    name: 'November'
   },
   {
     id: 12,
-    name: "Dicember"
+    name: 'December'
   }
 ]

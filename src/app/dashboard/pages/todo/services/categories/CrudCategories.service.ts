@@ -12,6 +12,10 @@ export class CrudCategoriesService {
   private apiUrl: string = `${environment.apiUrl}/${environment.apiRoutes.tasks.base}`
   private http = inject(HttpClient)
 
+  getApiUrl(): string{
+    return `${this.apiUrl}/${environment.apiRoutes.tasks.others[2].base}`;
+  }
+
   getCategories(): Observable<CategoryTask[]>{
     return this.http.get<CategoryTask[]>(`${this.apiUrl}/${environment.apiRoutes.tasks.others[2].base}`).pipe(
       catchError(err => {

@@ -25,6 +25,7 @@ import { InfoMedicineComponent } from './dashboard/pages/info/pages/info-card/pa
 import { InfoInvestingComponent } from './dashboard/pages/info/pages/info-card/pages/info-investing/info-investing.component';
 import { InfoWorkoutComponent } from './dashboard/pages/info/pages/info-card/pages/info-workout/info-workout.component';
 import { FinanceComponent } from './dashboard/pages/finance/finance.component';
+import { AssignCalendarComponent } from './dashboard/pages/calendar/pages/assign-calendar/assign-calendar.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent, pathMatch: 'full'},
@@ -40,7 +41,8 @@ export const routes: Routes = [
     {path: 'profile', component: ProfileComponent},
     {path: 'calendar', component: CalendarComponent, children: [
       {path: 'courses', component: CoursesComponent},
-      {path: 'habilities', component: HabilitiesComponent}
+      {path: 'habilities', component: HabilitiesComponent},
+      {path: 'assign-calendar', component: AssignCalendarComponent}
     ]},
     {path: 'todo', component: TodoComponent, children: [
       {path: 'home-todo', component: TodoHomeComponent},

@@ -3,16 +3,16 @@ export interface Task {
   title: string;
   description?: string;
   make_date: string;
+  avatar_url: string;
   limit_date: string;
-  id_estimation:
-    {
-      id: number;
-      name: string;
-    }
-  id_status_task?: string;
-  id_category_task?: string;
-  id_priority?: string;
-  id_schedule?: string;
+  id_estimation: {
+    id: string;
+    name: string;
+  }
+  id_status_task: string;
+  id_category_task: string;
+  id_priority: string;
+  id_course: string | null;
 
   index?: number;
   isEditingMake?: boolean;

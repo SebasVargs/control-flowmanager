@@ -1,7 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategComplexService } from '../todo-today/services/categ-complex.service';
+import { CrudTasksService } from '../../services/tasks/crudTasks.service';
+import { CrudEstimationsService } from '../../services/estimations/crudEstimations.service';
+import { CrudPriorityService } from '../../services/priorities/CrudPriority.service';
+import { CrudCategoriesService } from '../../services/categories/CrudCategories.service';
+import { CrudStatusService } from '../../services/status/CrudStatus.service';
+import { CategoryTask } from '../../models/CategoryTask';
+import { EstimationTask } from '../../models/EstimationTask';
+import { PriorityTasks } from '../../models/PriorityTask';
+import { StatusTask } from '../../models/StatusTask';
+import { Course } from '../../models/Courses';
+import { CrudCoursesService } from '../../../calendar/services/courses/CrudCourses.service';
+import { GeneralDataService } from '../../../../../core/services/generalData.service';
 
 @Component({
   selector: 'app-add-task',
@@ -11,169 +22,106 @@ import { CategComplexService } from '../todo-today/services/categ-complex.servic
 })
 export class AddTaskComponent implements OnInit{
 
-  taskForm: any;
-
   getIdPriorities: number = 0;
   getIdComplexities: number = 0;
 
   hashMaps: boolean = false;
   hashCourse: boolean = false;
 
-  categoriesTask: any[] = []
-  complexitiesTask: any[] = []
-  prioritiesTask: any[] = []
-  statusTask: any[] = []
-  courses: any[] = []
+  categories: CategoryTask[] = []
+  estimations: EstimationTask[] = []
+  priorities: PriorityTasks[] = []
+  status: StatusTask[] = []
+  courses: Course[] = []
 
+  private fb = inject(FormBuilder)
+  private serviceTask = inject(CrudTasksService)
+  private serviceEstimation = inject(CrudEstimationsService)
+  private servicePriority = inject(CrudPriorityService)
+  private serviceCategory = inject(CrudCategoriesService)
+  private serviceStatus = inject(CrudStatusService)
+  private serviceCourse = inject(CrudCoursesService)
+  private generalData = inject(GeneralDataService)
 
-  constructor(
-    private fb: FormBuilder,
-    private getCateComplex: CategComplexService
-  ) {
-    this.taskForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(25)]],
+  readonly urlCourses: string = `${this.serviceCourse.getApiUrl()}`
+  readonly urlStatusTasks: string = `${this.serviceStatus.getApiUrl()}`
+  readonly urlCategories: string = `${this.serviceCategory.getApiUrl()}`
+  readonly urlPriorities: string = `${this.servicePriority.getApiUrl()}`
+  readonly urlEstimations: string = `${this.serviceEstimation.getApiUrl()}`
+  readonly urlTaks: string = `${this.serviceTask.getApiUrl()}`
+
+  private createForm(): FormGroup{
+    return this.fb.group({
+      title: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.required, Validators.maxLength(512)]],
       make_date: ['2024-04-10', Validators.required],
       limit_date: ['2025-05-11', Validators.required],
       avatar_url: ['jiowdjaiowfj.wdij', [Validators.maxLength(255)]],
       id_priority: [1, Validators.required],
       id_estimation: [1, Validators.required],
-      id_category_task: [1, Validators.required],
-      id_status_task: [1, Validators.required],
-      id_course: [0, ]
+      id_category_task: [0, Validators.required],
+      id_status_task: [0, Validators.required],
+      id_course: [undefined]
     });
   }
 
+  taskForm: FormGroup = this.createForm();
+
   ngOnInit(): void {
-    this.getCategories()
-    this.getStatusTask()
-    this.getSchedule()
-    this.getPriorities()
-    this.getComplexities()
+    this.loadData<StatusTask>(this.urlStatusTasks, 'status')
+    this.loadData<CategoryTask>(this.urlCategories, 'categories')
+    this.loadData<PriorityTasks>(this.urlPriorities, 'priorities')
+    this.loadData<EstimationTask>(this.urlEstimations, 'estimations')
+    this.loadData<Course>(this.urlCourses, 'courses')
+  }
+
+  //START Services
+
+  private loadData<T>(url: string, target: keyof this & string): void {
+    this.generalData.getDataWithIndex(url).subscribe({
+      next: (data: T[]) => {
+        (this[target] as T[]) = data;
+      },
+      error: (err) => {
+        console.error(`Error cargando datos desde ${url}`, err)
+      }
+    });
   }
 
   createTask(): void {
-    this.getCateComplex.createTask(this.taskForm.value).subscribe({
+    const taskData = this.taskForm.getRawValue();
+    this.generalData.createData(`${this.urlTaks}`, taskData).subscribe({
       next: (res) => {
-        console.log('Tarea creada:', res);
-      },
-      error: (err) => {
-        console.error('Error al crear detalles', err);
+        console.log('Tarea creada', res);
       }
     })
   }
 
-  getSchedule(): void {
-    this.getCateComplex.getSchedule().subscribe({
-      next: (data) => {
-        this.courses = data.map((courses: any, index: any) => ({
-          ...courses,
-          index: index + 1
-        }))
-      },
-      error: (err) => {
-        console.error("Error al obtener el calendario")
-      }
-    })
+  private setFormValue(formKey: string, value: number | undefined): void {
+    if(value !== undefined){
+      this.taskForm.patchValue({ [formKey]: value });
+    } else {
+      console.error(`No se pudo actualizar ${formKey}. Valor no definido`);
+    }
   }
 
-  getStatusTask(): void{
-    this.getCateComplex.getStatusTask().subscribe({
-      next: (data) => {
-        this.statusTask = data.map((statusTask: any, index: any) => ({
-          ...statusTask,
-          index: index + 1
-        }))
-      },
-      error: (err) => {
-        console.error("Error al obtener los estados de la tareas")
-      }
-    })
-  }
-
-  getCategories():void {
-    this.getCateComplex.getCategories().subscribe({
-      next: (data) => {
-        this.categoriesTask = data.map((categoryTask: any, index: any) => ({
-          ...categoryTask,
-          index: index + 1
-        }));
-      },
-      error: (err) => {
-        console.error("Error al obtener las categorias de tareas")
-      }
-    })
-  }
-
-  getPriorities():void {
-    this.getCateComplex.getPriorities().subscribe({
-      next: (data) => {
-        this.prioritiesTask = data.map((priorityTask: any, index: any) => ({
-          ...priorityTask,
-          index: index + 1
-        }));
-      },
-      error: (err) => {
-        console.error("Error al obtener las complejidades de tareas")
-      }
-    })
-  }
-
-  getComplexities():void {
-    this.getCateComplex.getComplexities().subscribe({
-      next: (data) => {
-        this.complexitiesTask = data.map((complexityTask: any, index: any) => ({
-          ...complexityTask,
-          index: index + 1
-        }));
-      },
-      error: (err) => {
-        console.error("Error al obtener las complejidades de tareas")
-      }
-    })
-  }
+  //END Services
 
   setPriority(priorities: any): void {
-    this.getIdPriorities = priorities.id;
-    if (this.getIdPriorities !== undefined) {
-      this.taskForm.patchValue({ id_priority: this.getIdPriorities });
-      console.log('id_priority actualizado:', this.taskForm.get('id_priority')?.value);
-    } else {
-      console.error('No se pudo actualizar id_priority. Valor no definido.');
-    }
+    this.setFormValue('id_priority', priorities.id)
   }
 
-  setComplexity(complexities: any): void {
-    this.getIdComplexities = complexities.id;
-    if (this.getIdComplexities !== undefined) {
-      this.taskForm.patchValue({ id_estimation: this.getIdComplexities });
-      console.log('id_estimation actualizado:', this.taskForm.get('id_estimation')?.value);
-    } else {
-      console.error('No se pudo actualizar id_estimation. Valor no definido.');
-    }
+  setComplexity(estimations: any): void {
+    this.setFormValue('id_estimation', estimations.id)
   }
 
   onSubmit(): void {
     console.log(this.taskForm.value)
     this.createTask()
-    if (this.taskForm.valid) {
-
-    }
   }
 
-  showMaps(){
-    if(this.hashCourse == false){
-      this.hashCourse = true
-    } else {
-      this.hashCourse = false
-    }
+  toggleProperty(property: 'hashMaps' | 'hashCourse'): void {
+    this[property] = !this[property];
   }
 
-  showCourse(){
-    if(this.hashMaps == false){
-      this.hashMaps = true
-    } else {
-      this.hashMaps = false
-    }
-  }
 }
