@@ -1,0 +1,58 @@
+.fluid-title {
+  margin-bottom: max(1rem, 2%);
+}
+
+.fluid-title > h1 {
+  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  font-weight: 500;
+}
+
+.fluid-title > h3 {
+  font-size: min(10vw, 1rem);
+  margin-top: -0.5vw;
+}
+
+.card-fluid > div {
+  margin: min(2rem, 3%);
+}
+
+.fluid-id {
+  background-color: var(---color-bg-items);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-fluid {
+  animation: modalFadeIn 0.4s ease-out; /* Duración y tipo de animación */
+}
+
+.modal-fluid-child {
+  margin: max(0.5rem, 10px);
+  width: max(55vw, 800px);
+  height: 65%
+}
+
+@media (max-height: 680px) {
+  .modal-fluid-child{
+    height: 95%;
+  }
+}
+
+.nav-img{
+  margin-top: max(1rem, 1px);
+  width: clamp(16%, 14vw, 50%);
+}
+
+.nav-options {
+  height: calc(var(--spacing) * 68);
+  overflow-y: auto;
+}

@@ -14,15 +14,100 @@
         <td class="border border-gray-300 px-4 py-2 text-center">{{ hour }}</td>
         <td *ngFor="let day of days" class="border border-gray-300 px-4 py-2">
           <!-- Mostrar eventos -->
-           <div *ngIf="calendar[day.name] && calendar[day.name][hour]">
-            <div *ngFor="let event of calendar[day.name][hour]" class="bg-blue-50 rounded p-2 mb-1">
-              <p class="font-semibold">{{ event.course }}</p>
-              <p class="text-xs text-gray-600">Duración: {{ event.duration }} min</p>
-              <p class="text-xs text-gray-600">Recurrente: {{ event.recurrent ? 'Sí' : 'No' }}</p>
+          <div *ngIf="calendar[day.name] && calendar[day.name][hour]" class="flex justify-center items-center">
+            <div *ngFor="let event of calendar[day.name][hour]" class="bg-blue-50 rounded p-2 mb-1 hover:scale-105">
+              <button (click)="openModalCourses(event, day.name, hour)">
+                <p class="font-semibold">{{ event.course }}</p>
+                <p class="text-xs text-gray-600">Duración: {{ event.duration }} min</p>
+              </button>
             </div>
-           </div>
+          </div>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<section>
+  <!-- Modal -->
+  <div *ngIf="openModalCourse" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-[9999]">
+    <div class="bg-white w-full max-w-3xl p-6 md:p-8 rounded-lg shadow-lg relative">
+      <!-- Botón para cerrar -->
+      <button (click)="onHiddeModalCourse()"
+        class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl md:text-4xl">
+        &times;
+      </button>
+
+      <!-- Título del curso -->
+      <h1 class="text-xl md:text-2xl font-bold text-center text-gray-800">
+        {{ selectedCourse.course }}
+      </h1>
+      <p class="text-sm text-gray-600 mt-3 text-center">
+        {{ dayAndHour[0] }} - {{ dayAndHour[1] }}
+      </p>
+      <p class="text-sm text-gray-600 text-center">
+        Duración: {{ dayAndHour[2] }}
+      </p>
+
+      <div class="flex flex-row">
+        <!-- Nav con tareas -->
+        <nav class="w-full flex flex-row flex-wrap gap-4 mt-6 justify-start items-start border-t pt-4 m-2 max-h-[30rem] overflow-y-auto">
+          <h2 class="font-semibold text-gray-700 w-full mb-2 text-lg">
+            Tareas
+          </h2>
+
+          <section *ngFor="let taskFilter of taskFilter" class="w-full">
+            <div class="bg-gray-50 p-4 rounded-lg shadow">
+              <!-- Título siempre visible -->
+              <div class="font-medium text-gray-800">
+                {{ taskFilter.title }}
+              </div>
+
+              <!-- Botón para mostrar/ocultar detalles -->
+              <button (click)="taskFilter.showDetails = !taskFilter.showDetails"
+                class="mt-2 w-full flex justify-between items-center bg-gray-100 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-200">
+                <span class="text-sm font-medium">Más detalles</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" [class.rotate-180]="taskFilter.showDetails"
+                  viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+
+              <!-- Contenido desplegable -->
+              <ul *ngIf="taskFilter.showDetails"
+                class="space-y-1 mt-2 text-sm text-gray-600 bg-white rounded-md p-3 shadow-inner">
+                <li>
+                  <strong>Categoría:</strong> {{ taskFilter.id_category.name }}
+                </li>
+                <li>
+                  <strong>Estimación:</strong> {{ taskFilter.id_estimation.name }}
+                </li>
+                <li>
+                  <strong>Prioridad:</strong> {{ taskFilter.id_priority.name }}
+                </li>
+              </ul>
+            </div>
+          </section>
+        </nav>
+
+        <!-- Habilidades -->
+        <nav class="w-full flex flex-col gap-4 mt-6 justify-start pt-4 border-t items-start m-2 max-h-[30rem] overflow-y-auto">
+          <h2 class="font-semibold text-gray-700 w-full mb-2 text-lg">
+            Habilidades
+          </h2>
+          <section *ngFor="let habilities of coursehabilFilter" class="w-full">
+            <div class="bg-gray-50 p-4 rounded-lg shadow">
+              <!-- Título siempre visible -->
+              <div class="font-medium text-gray-800">
+                {{ habilities.id_hability.name }}
+              </div>
+            </div>
+          </section>
+        </nav>
+      </div>
+
+    </div>
+  </div>
+</section>

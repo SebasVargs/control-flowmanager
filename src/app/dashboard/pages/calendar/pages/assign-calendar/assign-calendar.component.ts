@@ -9,6 +9,12 @@ import { settingsItems } from '../../../todo/shared/data/settings-items';
 import { CrudScheduleService } from '../../services/schedule/CrudSchedule.service';
 import { Router } from '@angular/router';
 import { dayWeek } from '../../shared/data/day-items';
+import { Schedule } from '../../models/Schedule';
+import { DateTimeService } from '../../services/utils/DateTime.service';
+import { GeneralDataService } from '../../../../../core/services/generalData.service';
+import { CrudTasksService } from '../../../todo/services/tasks/crudTasks.service';
+import { Task } from '../../../todo/models/Task';
+import { CourseHabilityService } from '../../services/course-hability/CourseHability.service';
 
 @Component({
   selector: 'app-assign-calendar',
@@ -17,8 +23,18 @@ import { dayWeek } from '../../shared/data/day-items';
   styleUrl: './assign-calendar.component.css'
 })
 export class AssignCalendarComponent {
-  currentRoute: string = 'home'; // Ruta inicial
 
+  constructor(
+  ){
+    this.configItems.find(config => config.label === 'Logout')!.onClick = this.openLogoutModal.bind(this)
+    this.generateHours(7, 20)
+  }
+
+  days = dayWeek;
+  calendar: { [day: string]: { [hour: string]: any[] } } = {};
+  hours: string[] = [];
+
+  currentRoute: string = 'home';
   isOpenCourses: boolean = false
   isOpenHabilities: boolean = false
   isMenuOpen: boolean = false;
@@ -28,41 +44,55 @@ export class AssignCalendarComponent {
   itemsDrop = menuItems;
   configItems = settingsItems
 
-  configOpen = false;
-  categoriesOpen = false;
-  dropdownOpen = false; // Controla si el dropdown está abierto o cerrado
-
-  ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      this.height = `${window.innerHeight}px`; // Altura dinámica basada en la ventana del navegador
-    }
-    // Escucha los cambios de ruta
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd)) // Filtra solo los eventos de finalización de navegación
-      .subscribe(() => {
-        // Actualiza la ruta actual
-        const routePath = this.activatedRoute.snapshot.firstChild?.routeConfig?.path;
-        this.currentRoute = routePath ? `home / ${routePath}` : 'home';
-      });
-    this.getSchedule();
-  }
+  configOpen: boolean = false;
+  categoriesOpen: boolean = false;
+  dropdownOpen: boolean = false;
+  openModalCourse: boolean = false;
+  selectedCourse: any;
+  dayAndHour: any[] = [];
+  tasks: Task[] = []
+  schedule: Schedule[] = []
+  courseHability: any[] = []
 
   private serviceSchedule = inject(CrudScheduleService)
   private router = inject(Router)
   private activatedRoute = inject(ActivatedRoute)
+  private dateTimeService = inject(DateTimeService)
+  private generalData = inject(GeneralDataService)
+  private serviceTasks = inject(CrudTasksService)
+  private serviceCourseHability = inject(CourseHabilityService)
 
-  constructor(
-  ){
-    this.configItems.find(config => config.label === 'Logout')!.onClick = this.openLogoutModal.bind(this)
-    this.generateHours(7, 20)
+  readonly urlTasks: string = `${this.serviceTasks.getApiUrl()}`
+  readonly urlSchedule: string = `${this.serviceSchedule.getApiUrl()}`
+  readonly urlCourseHability: string = `${this.serviceCourseHability.getApiUrl()}`
+
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.height = `${window.innerHeight}px`;
+    }
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        const routePath = this.activatedRoute.snapshot.firstChild?.routeConfig?.path;
+        this.currentRoute = routePath ? `home / ${routePath}` : 'home';
+      });
+    this.formatSchedule();
+    this.loadData<Schedule>(`${this.urlSchedule}`, 'schedule')
+    this.loadData<Task>(`${this.urlTasks}`, 'tasks')
+    this.loadData(`${this.urlCourseHability}`, 'courseHability')
   }
 
-  // Lista de días de la semana
-  days = dayWeek;
-  calendar: { [day: string]: { [hour: string]: any[] } } = {};
-
-  // Horas desde las 7:00 AM hasta las 8:00 PM
-  hours: string[] = [];
+  private loadData<T>(url: string, target: keyof this & string): void {
+    this.generalData.getDataWithIndex(url).subscribe({
+      next: (data: T[]) => {
+        (this[target] as T[]) = data;
+        console.log(data)
+      },
+      error: (err) => {
+        console.error(`Error cargando datos desde ${url}`, err)
+      }
+    });
+  }
 
   // Generar lista de horas
   private generateHours(startHour: number, endHour: number): void {
@@ -72,7 +102,7 @@ export class AssignCalendarComponent {
     }
   }
 
-  getSchedule(): void {
+  formatSchedule(): void {
     this.calendar = {};
     this.serviceSchedule.getSchedule().subscribe({
       next: (data) => {
@@ -87,9 +117,11 @@ export class AssignCalendarComponent {
         // Mapear los datos al calendario
         data.forEach(schedule => {
           const dayName = this.days.find(day => day.id === schedule.day_week)?.name;
-          const hour = this.formatHour(schedule.date_hour); // Formatear la hora desde `date_hour`
+          const hour = this.dateTimeService.formatHour(schedule.date_hour); // Formatear la hora desde `date_hour`
           if (dayName && hour && this.calendar[dayName]?.[hour]) {
             this.calendar[dayName][hour].push({
+              id: schedule.course.id,
+              day_week: schedule.day_week,
               course: schedule.course.name,
               duration: schedule.duration,
               recurrent: schedule.recurrent,
@@ -102,16 +134,6 @@ export class AssignCalendarComponent {
     });
   }
 
-
-  private formatHour(dateHour: Date): string {
-    const date = new Date(dateHour);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const suffix = hours >= 12 ? 'PM' : 'AM';
-    const formattedHour = `${hours > 12 ? hours - 12 : hours}:${minutes === 0 ? '00' : minutes} ${suffix}`;
-    return formattedHour;
-  }
-
   openLogoutModal(){
     this.isOpenLogoutModal = true
     document.body.style.overflow = 'hidden';
@@ -119,11 +141,12 @@ export class AssignCalendarComponent {
 
   closeLogoutModal(){
     this.isOpenLogoutModal = false;
-    document.body.style.overflow = '';
+    document.body.style.overflow = 'auto';
   }
 
   OpenCoursesModal(){
     this.isOpenCourses = true;
+    document.body.style.overflow = 'auto';
   }
 
   OpenHabilitiesModal(){
@@ -132,5 +155,48 @@ export class AssignCalendarComponent {
 
   configDropdown(): void {
     this.configOpen = !this.configOpen;
+  }
+
+  openModalCourses(course: Schedule[], day: string, hour: any){
+    this.dayAndHour = []
+    this.openModalCourse = true
+    this.selectedCourse = course;
+    this.dayAndHour.push(day, hour, this.dateTimeService.convertMinutesToHours(this.selectedCourse.duration))
+    this.filterCourses(this.selectedCourse)
+  }
+
+  courseFilter: any[] = [];
+  taskFilter: any[] = [];
+  coursehabilFilter: any[] = [];
+
+  filterCourses(course: any): void {
+    this.courseFilter = this.schedule.filter(
+      (schedule) =>
+        course.id === schedule.course.id &&
+        String(course.day_week).trim().toLowerCase() === String(schedule.day_week).trim().toLowerCase()
+    );
+    this.filterTasks();
+    this.habilitiesFilter(this.courseFilter);
+  }
+
+  filterTasks(): void {
+    this.taskFilter = this.tasks.filter(
+      (taskEach) =>
+        taskEach.id_course &&
+        taskEach.id_course.id != null &&
+        this.courseFilter.some((courseFilter) => taskEach.id_course.id === courseFilter.course.id)
+    );
+  }
+
+  habilitiesFilter(object: any[]): void {
+    this.coursehabilFilter = this.courseHability.filter((corhabil) =>
+      object.some((obj) => obj.course.name === corhabil.id_course.name)
+    );
+  }
+
+
+
+  onHiddeModalCourse(){
+    this.openModalCourse = false
   }
 }

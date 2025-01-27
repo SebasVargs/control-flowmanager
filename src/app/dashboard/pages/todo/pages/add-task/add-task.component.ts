@@ -66,6 +66,7 @@ export class AddTaskComponent implements OnInit{
   }
 
   taskForm: FormGroup = this.createForm();
+  categies: any[] = [];
 
   ngOnInit(): void {
     this.loadData<StatusTask>(this.urlStatusTasks, 'status')
@@ -73,6 +74,19 @@ export class AddTaskComponent implements OnInit{
     this.loadData<PriorityTasks>(this.urlPriorities, 'priorities')
     this.loadData<EstimationTask>(this.urlEstimations, 'estimations')
     this.loadData<Course>(this.urlCourses, 'courses')
+
+    this.categies = [
+      {
+        id: 1,
+        name: 'Development',
+        icon_path: 'https://imageshack.com/i/po6Cpxgcp',
+      },
+      {
+        id: 2,
+        name: 'Design',
+        icon_path: 'https://via.placeholder.com/150',
+      },
+    ];
   }
 
   //START Services
@@ -81,6 +95,7 @@ export class AddTaskComponent implements OnInit{
     this.generalData.getDataWithIndex(url).subscribe({
       next: (data: T[]) => {
         (this[target] as T[]) = data;
+        console.log(data)
       },
       error: (err) => {
         console.error(`Error cargando datos desde ${url}`, err)

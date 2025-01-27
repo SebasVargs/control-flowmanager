@@ -12,8 +12,10 @@ export interface Task {
   id_status_task: string;
   id_category_task: string;
   id_priority: string;
-  id_course: string | null;
-
+  id_course: {
+    id: number;
+    name: string;
+  }
   index?: number;
   isEditingMake?: boolean;
   isEditingLimit?: boolean;

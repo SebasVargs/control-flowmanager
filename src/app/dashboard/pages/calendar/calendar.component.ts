@@ -9,6 +9,8 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
 import { filter } from 'rxjs/operators';
 import { CrudScheduleService } from './services/schedule/CrudSchedule.service';
 import { dayWeek } from './shared/data/day-items';
+import { GeneralDataService } from '../../../core/services/generalData.service';
+import { Schedule } from './models/Schedule';
 
 @Component({
   selector: 'app-calendar',
@@ -18,8 +20,17 @@ import { dayWeek } from './shared/data/day-items';
 })
 export class CalendarComponent implements OnInit {
 
-  currentRoute: string = 'home'; // Ruta inicial
+  constructor(
+  ){
+    this.configItems.find(config => config.label === 'Logout')!.onClick = this.openLogoutModal.bind(this)
+    this.generateHours(7, 20)
+  }
 
+  days = dayWeek;
+  calendar: { [day: string]: { [hour: string]: any[] } } = {};
+  hours: string[] = [];
+
+  currentRoute: string = 'home'; // Ruta inicial
   isOpenCourses: boolean = false
   isOpenHabilities: boolean = false
   isMenuOpen: boolean = false;
@@ -28,10 +39,19 @@ export class CalendarComponent implements OnInit {
   height: String = '100vh';
   itemsDrop = menuItems;
   configItems = settingsItems
+  schedule: Schedule[] = []
 
   configOpen = false;
   categoriesOpen = false;
   dropdownOpen = false; // Controla si el dropdown está abierto o cerrado
+
+  private serviceSchedule = inject(CrudScheduleService)
+  private router = inject(Router)
+  private activatedRoute = inject(ActivatedRoute)
+  private generalData = inject(GeneralDataService)
+
+  readonly urlSchedule: string = `${this.serviceSchedule.getApiUrl()}`
+
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -45,25 +65,7 @@ export class CalendarComponent implements OnInit {
         const routePath = this.activatedRoute.snapshot.firstChild?.routeConfig?.path;
         this.currentRoute = routePath ? `home / ${routePath}` : 'home';
       });
-    this.getSchedule();
   }
-
-  private serviceSchedule = inject(CrudScheduleService)
-  private router = inject(Router)
-  private activatedRoute = inject(ActivatedRoute)
-
-  constructor(
-  ){
-    this.configItems.find(config => config.label === 'Logout')!.onClick = this.openLogoutModal.bind(this)
-    this.generateHours(7, 20)
-  }
-
-  // Lista de días de la semana
-  days = dayWeek;
-  calendar: { [day: string]: { [hour: string]: any[] } } = {};
-
-  // Horas desde las 7:00 AM hasta las 8:00 PM
-  hours: string[] = [];
 
   // Generar lista de horas
   private generateHours(startHour: number, endHour: number): void {
@@ -73,44 +75,16 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getSchedule(): void {
-    this.serviceSchedule.getSchedule().subscribe({
-      next: (data) => {
+  private loadData<T>(url: string, target: keyof this & string): void {
+    this.generalData.getDataWithIndex(url).subscribe({
+      next: (data: T[]) => {
+        (this[target] as T[]) = data;
         console.log(data)
-        // Inicializar el calendario
-        this.days.forEach(day => {
-          this.calendar[day.name] = {}; // Asume que `day.name` es el nombre del día
-          this.hours.forEach(hour => {
-            this.calendar[day.name][hour] = []; // Cada hora inicia como un array vacío
-          });
-        });
-
-        // Mapear los datos al calendario
-        data.forEach(schedule => {
-          const dayName = this.days.find(day => day.id === schedule.day_week)?.name;
-          const hour = this.formatHour(schedule.date_hour); // Formatear la hora desde `date_hour`
-          if (dayName && hour && this.calendar[dayName]?.[hour]) {
-            this.calendar[dayName][hour].push({
-              course: schedule.course.name,
-              duration: schedule.duration,
-              recurrent: schedule.recurrent,
-              info: schedule.course.info,
-            });
-          }
-        });
       },
-      error: (err) => console.error('Error fetching schedule:', err),
+      error: (err) => {
+        console.error(`Error cargando datos desde ${url}`, err)
+      }
     });
-  }
-
-
-  private formatHour(dateHour: Date): string {
-    const date = new Date(dateHour);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const suffix = hours >= 12 ? 'PM' : 'AM';
-    const formattedHour = `${hours > 12 ? hours - 12 : hours}:${minutes === 0 ? '00' : minutes} ${suffix}`;
-    return formattedHour;
   }
 
   openLogoutModal(){

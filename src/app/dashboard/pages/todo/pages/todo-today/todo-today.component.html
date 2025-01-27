@@ -1,25 +1,42 @@
 <div class="flex justify-between mr-6">
   <span class="text-slate-500">Task / today</span>
-  <div class="navbar-main flex flex-row">
+  <div class="flex flex-row">
+    <div class="navbar-main flex flex-row">
+      <div class="relative">
+        <span class="pl-2 text-sm">Courses</span>
+        <select [(ngModel)]="selectedCourseId" (change)="onCourseChange($event)"
+          class="ml-2 w-32 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 bg-white border border-gray-100 hover:bg-slate-200 dark:placeholder-gray-600 dark:border-gray-800">
+          <option value="" disabled selected>Course</option>
+          <option *ngFor="let course of taskData.courses" [value]="course.id">
+            {{ course.name }}
+          </option>
+        </select>
+      </div>
 
-    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
-      <span>Course</span>
-    </a>
-    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
-      <span>Status</span>
-    </a>
-    <a href="" class="ml-2 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-slate-200 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
-      <span>Hability</span>
-    </a>
-    <a routerLink="../add-task" class="ml-2 cursor-pointer bg-my-color-3 text-slate-50 flex items-center rounded-lg p-1 pr-4 pl-4 hover:bg-my-color-2 hover:scale-105 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
-      <span>Add Task</span>
-    </a>
+      <div class="relative">
+        <span class="pl-2 text-sm">Habilities</span>
+        <select [(ngModel)]="selectedHabilityId" (change)="onHabilityChange($event)"
+          class="ml-2 w-32 cursor-pointer text-slate-800 flex items-center rounded-lg p-1 bg-white border border-gray-100 hover:bg-slate-200 dark:placeholder-gray-600 dark:border-gray-800">
+          <option value="" disabled selected>Course</option>
+          <option *ngFor="let hability of taskData.habilities" [value]="hability.id">
+            {{ hability.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-2">
+      <a routerLink="../add-task"
+        class="ml-2 cursor-pointer bg-my-color-3 text-slate-50 flex items-center rounded-lg p-2 pl-3 pr-3 hover:bg-my-color-2 hover:scale-105 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
+        <span>Add Task</span>
+      </a>
+    </div>
   </div>
+
 </div>
 <h1 class="title-main flex text-3xl mb-4">Today task</h1>
 <div class="m-1">
   <h1 class="flex text-lg">Priority</h1>
-  <div *ngIf="!isEditingFilter" class="flex">
+  <div *ngIf="!config.isEditingFilter" class="flex">
     <button class="flex justify-center items-center p-2 text-black hover:bg-slate-200"
       (click)="cancelFilterPriorities()" aria-label="Cancel">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -31,10 +48,10 @@
 
   <div class="priority-main flex flex-row-reverse gap-1 ml-2 mr-2">
     <div class="priority flex flex-row space-x-4">
-      <div *ngFor="let priority of priorities" class="priority-item cursor-pointer rounded-lg px-2 py-1 text-white"
+      <div *ngFor="let priority of taskData.priorities" class="priority-item cursor-pointer rounded-lg px-2 py-1 text-white"
         [ngClass]="{
-          'bg-slate-300': selectedPriority === priority.name,
-          'hover:bg-white': selectedPriority !== priority.name
+          'bg-slate-300': taskFilters.selectedPriority === priority.name,
+          'hover:bg-white': taskFilters.selectedPriority !== priority.name
         }" (click)="filterPriorities(priority.name)">
         {{ priority.name }}
       </div>
@@ -47,7 +64,7 @@
       <div class="w-full p-1 hover:scale-100">
 
         <div>
-          <input type="search" [(ngModel)]="searchText" id="form1" class="form-control" placeholder="Search"
+          <input type="search" [(ngModel)]="taskFilters.searchText" id="form1" class="form-control" placeholder="Search"
             aria-label="search"
             class="rounded-sm mb-1 block w-full py-2 pr-5 text-gray-100 md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-white dark:text-gray-800 focus:border-my-color-2 dark:focus:border-my-color-2 focus:ring-my-color-2 focus:outline-none focus:ring focus:ring-opacity-10 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
         </div>
@@ -92,12 +109,15 @@
                 <th scope="col"
                   class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
                   Estimation</th>
+                <th scope="col"
+                  class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-100 dark:text-gray-100">
+                  Course</th>
 
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-800">
-              <tr *ngFor="let task of tasks" (click)="selectItem(task)"
-                [ngClass]="{'bg-slate-100': selectedTask === task}">
+              <tr *ngFor="let task of taskData.tasks" (click)="selectItem(task)"
+                [ngClass]="{'bg-slate-100': config.selectedTask === task}">
                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                   <div>
                     <div class="text-gray-800">
@@ -127,7 +147,7 @@
 
                 <td *ngIf="task.isEditingMake" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
                   <div class="flex flex-col justify-center items-center">
-                    {{ formattedDate || task.make_date }}
+                    {{ config.formattedDate || task.make_date }}
                     <button (click)="hiddeFormatMake(task)" class="mt-1">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-4">
@@ -152,7 +172,7 @@
                 </td>
                 <td *ngIf="task.isEditingLimit" class="px-12 py-4 text-sm font-medium whitespace-nowrap text-slate-800">
                   <div class="flex flex-col justify-center items-center">
-                    {{ formattedDate || task.limit_date }}
+                    {{ config.formattedDate || task.limit_date }}
                     <button (click)="hiddeFormatLimit(task)" class="mt-1">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-4">
@@ -178,6 +198,12 @@
                     </div>
                   </div>
                 </td>
+                <td
+                  class="scrollable-cell px-2 py-4 text-sm font-medium max-w-[10rem] whitespace-nowrap overflow-x-auto">
+                  <div class="inline-block px-3 py-2 text-sm rounded-full text-emerald-600 gap-x-2">
+                    {{ task.id_course?.name || '' }}
+                  </div>
+                </td>
 
 
               </tr>
@@ -186,7 +212,7 @@
         </div>
       </div>
 
-      <div *ngIf="selectedTask"
+      <div *ngIf="config.selectedTask"
         class="flex flex-col bg-white text-black w-full p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-100 border border-gray-100 dark:placeholder-gray-600 dark:border-gray-800">
         <!-- Header -->
         <div class="flex justify-between items-center border-b border-slate-white pb-2 mb-4">
@@ -200,14 +226,14 @@
                 </svg>
               </button>
             </div>
-            <h1 *ngIf="!selectedTask.isEditingDates" class="text-xl font-semibold">{{ selectedTask.title }}</h1>
-            <input *ngIf="selectedTask.isEditingDates" type="text" placeholder="Edit description..."
+            <h1 *ngIf="!config.selectedTask" class="text-xl font-semibold">{{ config.selectedTask }}</h1>
+            <input *ngIf="config.selectedTask" type="text" placeholder="Edit description..."
               class="w-96 p-2 rounded-md bg-white text-black border border-slate-600 shadow-md"
-              value="{{ selectedTask.title }}">
+              value="{{ config.selectedTask.title }}">
           </div>
           <div class="ml-6 flex items-center">
             <span class="flex justify-center px-3 py-2 w-24 rounded-full bg-blue-500 text-white text-sm font-medium">
-              {{ selectedTask.id_status.name }}
+              {{ config.selectedTask.id_status.name }}
             </span>
           </div>
         </div>
@@ -216,10 +242,10 @@
           <!-- Description -->
           <div class="mb-4">
             <h1 class="text-lg font-semibold mb-1">Description</h1>
-            <p *ngIf="!selectedTask.isEditingDates" class="text-sm text-gray-700">{{ selectedTask.description }}</p>
-            <input *ngIf="selectedTask.isEditingDates" type="text" placeholder="Edit description..."
+            <p *ngIf="!config.selectedTask.isEditingDates" class="text-sm text-gray-700">{{ config.selectedTask.description }}</p>
+            <input *ngIf="config.selectedTask.isEditingDates" type="text" placeholder="Edit description..."
               class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-600 shadow-md"
-              value="{{ selectedTask.description }}">
+              value="{{ config.selectedTask.description }}">
           </div>
 
           <!-- Calendar -->
@@ -228,17 +254,19 @@
             <div class="flex flex-col gap-3">
               <div>
                 <h2 class="text-sm font-medium mb-1 text-gray-800">Make Date</h2>
-                <input *ngIf="selectedTask.isEditingDates" type="date"
+                <input *ngIf="config.selectedTask.isEditingDates" type="date"
                   class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-800"
-                  value="{{ selectedTask.make_date }}">
-                <span class="text-red-700" *ngIf="!selectedTask.isEditingDates">{{ selectedTask.formattedMakeDate }}</span>
+                  value="{{ config.selectedTask.make_date }}">
+                <span class="text-red-700" *ngIf="!config.selectedTask.isEditingDates">{{ config.selectedTask.formattedMakeDate
+                  }}</span>
               </div>
               <div>
                 <h2 class="text-sm font-medium mb-1 text-gray-800">Limit Date</h2>
-                <input *ngIf="selectedTask.isEditingDates" type="date"
+                <input *ngIf="config.selectedTask.isEditingDates" type="date"
                   class="w-full p-2 rounded-md bg-slate-300 text-slate-800 border border-slate-600"
-                  value="{{ selectedTask.limit_date }}">
-                <span class="text-red-700" *ngIf="!selectedTask.isEditingDates">{{ selectedTask.formattedLimitDate }}</span>
+                  value="{{ config.selectedTask.limit_date }}">
+                <span class="text-red-700" *ngIf="!config.selectedTask.isEditingDates">{{ config.selectedTask.formattedLimitDate
+                  }}</span>
               </div>
             </div>
           </div>
@@ -253,24 +281,23 @@
 
           <!-- Buttons -->
           <div class="flex justify-end gap-4 mt-4">
-            <button *ngIf="!selectedTask.isEditingDates" (click)="openDeleteTask(selectedTask.id)"
-
+            <button *ngIf="!config.selectedTask.isEditingDates" (click)="openDeleteTask(config.selectedTask.id)"
               class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-md shadow-md transition-colors duration-300">
               Eliminate
             </button>
-            <button *ngIf="!selectedTask.isEditingDates" (click)="toggleEditDates(selectedTask)"
+            <button *ngIf="!config.selectedTask.isEditingDates" (click)="toggleEditDates(config.selectedTask)"
               class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md shadow-md transition-colors duration-300">
               Update
             </button>
-            <button *ngIf="selectedTask.isEditingDates" (click)="toggleEditDates(selectedTask)"
+            <button *ngIf="config.selectedTask.isEditingDates" (click)="toggleEditDates(config.selectedTask)"
               class="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded-md shadow-md transition-colors duration-300">
               Cancel
             </button>
-            <button *ngIf="selectedTask.isEditingDates"
+            <button *ngIf="config.selectedTask.isEditingDates"
               class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-300">
               Update
             </button>
-            <button *ngIf="!selectedTask.isEditingDates"
+            <button *ngIf="!config.selectedTask.isEditingDates"
               class="px-4 py-2 bg-green-700 hover:bg-green-600 text-white rounded-md shadow-md transition-colors duration-300">
               Complete
             </button>
@@ -285,9 +312,7 @@
 </div>
 
 <!-- Modal (Ventana Emergente) -->
-<section
-  *ngIf="isDeleteTask"
-  class="fixed inset-0 bg-my-color-1 bg-opacity-50 flex items-center justify-center z-50">
+<section *ngIf="config.isDeleteTask" class="fixed inset-0 bg-my-color-1 bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-my-color-1 text-gray-100 rounded-lg shadow-lg w-96 p-6">
     <!-- Título -->
     <h1 class="text-xl font-semibold mb-4 text-center">Borrar Tarea</h1>
@@ -297,13 +322,11 @@
 
     <!-- Botones -->
     <div class="flex justify-center space-x-4">
-      <button
-        (click)="acceptLogoutModal()"
+      <button (click)="acceptLogoutModal()"
         class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-200">
         Aceptar
       </button>
-      <button
-        (click)="closeLogoutModal()"
+      <button (click)="closeLogoutModal()"
         class="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200">
         Cancelar
       </button>

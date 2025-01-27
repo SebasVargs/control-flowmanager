@@ -37,6 +37,14 @@ export const environment = {
         {
           base: 'schedule',
           byId: (id: number) => `schedule/${id}`
+        },
+        {
+          base: 'course-hability',
+          byId: (id: number) => `course-hability/${id}`
+        },
+        {
+          base: 'hability',
+          byId: (id: number) => `hability/${id}`
         }
       ]
     }

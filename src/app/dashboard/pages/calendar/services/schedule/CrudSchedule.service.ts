@@ -12,6 +12,10 @@ export class CrudScheduleService {
   private apiUrl: string = `${environment.apiUrl}/${environment.apiRoutes.schedule.base}`
   private http = inject(HttpClient)
 
+  getApiUrl(): string{
+    return `${this.apiUrl}/${environment.apiRoutes.schedule.others[1].base}`
+  }
+
   getSchedule(): Observable<Schedule[]>{
     return this.http.get<Schedule[]>(`${this.apiUrl}/${environment.apiRoutes.schedule.others[1].base}`).pipe(
       catchError(err => {

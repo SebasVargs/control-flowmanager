@@ -1,4 +1,5 @@
 export interface CategoryTask {
   id?: number;
-  name: String;
+  name: string;
+  icon_path: string;
 }

@@ -1,8 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Months } from '../models/Months';
-import { DateTimeTaskService } from '../services/date-time-task.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +11,9 @@ export class DateUtilsService implements OnInit{
   months: Months[] = []
 
   constructor(
-    private monthTaskService: DateTimeTaskService
   ) { }
 
   ngOnInit(): void {
-    this.monthTaskService.getMonths().subscribe((data) => {
-      console.log("Meses recibidos:", data);  // Verifica los datos de meses recibidos
-      this.months = data;
-    })
   }
 
   getCurrentDate(): string {
